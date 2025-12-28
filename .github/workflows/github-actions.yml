@@ -1,26 +1,39 @@
-name: assignment-test
+name: assignment-1-test
 on:
-    push:
-        tags-ignore:
-            - '*'
-        branches:
-            - '*'
+  push:
+    tags-ignore:
+      - '*'
+    branches:
+      - '*'
+
 jobs:
-    unit-test:
-        container: cuaesd/aesd-autotest:24-unit-test
-        runs-on: self-hosted
-        steps:
-          - uses: actions/checkout@v2
-          - name: Checkout submodules
-            run : git submodule update --init --recursive
-          - name: Run unit test
-            run: ./unit-test.sh
-    full-test:
-        container: cuaesd/aesd-autotest:24-assignment2
-        runs-on: self-hosted
-        steps:
-          - uses: actions/checkout@v2
-          - name: Checkout submodules
-            run : git submodule update --init --recursive
-          - name: Run full test
-            run: ./full-test.sh
+  unit-test:
+    runs-on: self-hosted
+    container: 
+      image: cuaesd/aesd-autotest:24-unit-test
+      options: --user root
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Run unit test
+        run: ./unit-test.sh
+
+  full-test:
+    runs-on: self-hosted
+    container:
+      # Change the tag from '24-assignment2' to '24-assignment1'
+      image: cuaesd/aesd-autotest:24-assignment1
+      options: --user root
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Run full test
+        run: |
+          export ASSIGNMENT=assignment1
+          ./full-test.sh
