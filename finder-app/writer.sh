@@ -20,4 +20,3 @@ else
 	echo File could not be created
 	exit 1
 fi
-
